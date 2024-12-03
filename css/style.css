@@ -1,15 +1,18 @@
 :root {
-    --primary-color: #2563eb;
-    --secondary-color: #1e40af;
-    --accent-color: #3b82f6;
-    --text-primary: #1f2937;
-    --text-secondary: #4b5563;
-    --bg-primary: #ffffff;
-    --bg-secondary: #f3f4f6;
-    --bg-accent: #e5e7eb;
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --primary-color: #64ffda;
+    --secondary-color: #0a192f;
+    --accent-color: #8892b0;
+    --text-primary: #e6f1ff;
+    --text-secondary: #8892b0;
+    --bg-primary: #0a192f;
+    --bg-secondary: #112240;
+    --bg-accent: #1d2d50;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5);
+    --glow-sm: 0 0 5px rgba(100, 255, 218, 0.2);
+    --glow-md: 0 0 10px rgba(100, 255, 218, 0.3);
+    --glow-lg: 0 0 15px rgba(100, 255, 218, 0.4);
 }
 
 * {
@@ -37,13 +40,15 @@ body {
 
 /* Navbar */
 .navbar {
-    background-color: var(--bg-primary);
+    background-color: rgba(10, 25, 47, 0.85);
+    backdrop-filter: blur(10px);
     box-shadow: var(--shadow-sm);
     position: fixed;
     width: 100%;
     top: 0;
     z-index: 1000;
     transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(100, 255, 218, 0.1);
 }
 
 .navbar.scrolled {
@@ -173,63 +178,78 @@ body {
 }
 
 .nav-links a {
+    color: var(--text-primary);
     text-decoration: none;
-    color: var(--text-secondary);
-    font-weight: 500;
-    transition: color 0.3s ease;
-    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+    position: relative;
 }
 
-.nav-links a:hover,
-.nav-links a.active {
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: var(--primary-color);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+    width: 100%;
+}
+
+.nav-links a:hover {
     color: var(--primary-color);
 }
 
 /* Hero Section */
 .hero {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: var(--bg-primary);
-    padding: 8rem 0 4rem;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
     position: relative;
     overflow: hidden;
 }
 
-.hero-shape {
+.hero::before {
+    content: '';
     position: absolute;
-    bottom: -50px;
-    left: 0;
-    width: 100%;
-    height: 100px;
-    background: var(--bg-primary);
-    clip-path: polygon(0 50%, 100% 0, 100% 100%, 0% 100%);
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(100, 255, 218, 0.1) 0%, transparent 70%);
+    top: -50%;
+    left: -50%;
+    animation: rotate 20s linear infinite;
 }
 
-.hero-content {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
-    position: relative;
-    z-index: 1;
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .hero h1 {
-    font-size: 3.5rem;
-    font-weight: 700;
+    font-size: 4rem;
     margin-bottom: 1rem;
-    line-height: 1.2;
-}
-
-.hero h2 {
-    font-size: 1.5rem;
-    font-weight: 500;
-    margin-bottom: 1.5rem;
-    opacity: 0.9;
+    background: linear-gradient(to right, var(--text-primary), var(--primary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .hero-description {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    max-width: 600px;
     margin-bottom: 2rem;
-    opacity: 0.8;
+    position: relative;
 }
 
 .contact-info {
@@ -269,24 +289,18 @@ body {
 }
 
 .btn-primary {
-    background-color: var(--bg-primary);
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
     color: var(--primary-color);
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    background-color: rgba(100, 255, 218, 0.1);
 }
 
 .btn-secondary {
-    background-color: transparent;
-    color: var(--bg-primary);
-    border: 2px solid var(--bg-primary);
-}
-
-.btn-secondary:hover {
-    background-color: var(--bg-primary);
-    color: var(--primary-color);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
 }
 
 /* Section Styles */
@@ -306,7 +320,7 @@ section {
 }
 
 .section-subtitle {
-    color: var(--text-secondary);
+    color: var(--primary-color);
     font-size: 1.1rem;
 }
 
@@ -318,15 +332,18 @@ section {
 }
 
 .education-card {
-    background: var(--bg-primary);
+    background: var(--bg-secondary);
     padding: 2rem;
     border-radius: 1rem;
     box-shadow: var(--shadow-md);
     transition: transform 0.3s ease;
+    border: 1px solid rgba(100, 255, 218, 0.1);
 }
 
 .education-card:hover {
     transform: translateY(-5px);
+    border-color: var(--primary-color);
+    box-shadow: var(--glow-sm);
 }
 
 .education-icon {
@@ -370,11 +387,12 @@ section {
 
 /* Experience Section */
 .experience-card {
-    background: var(--bg-primary);
+    background: var(--bg-secondary);
     padding: 2rem;
     border-radius: 1rem;
     box-shadow: var(--shadow-md);
     margin-bottom: 2rem;
+    border: 1px solid rgba(100, 255, 218, 0.1);
 }
 
 .experience-header {
@@ -408,23 +426,37 @@ section {
     color: var(--text-secondary);
 }
 
-/* Projects Section */
-.project-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+/* Project Cards */
+.project-card {
+    background: var(--bg-secondary);
+    border: 1px solid rgba(100, 255, 218, 0.1);
+    border-radius: 1rem;
+    padding: 2rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
 }
 
-.project-card {
-    background: var(--bg-primary);
-    border-radius: 1rem;
-    box-shadow: var(--shadow-md);
-    overflow: hidden;
-    transition: transform 0.3s ease;
+.project-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(100, 255, 218, 0.03), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s;
+}
+
+.project-card:hover::before {
+    transform: translateX(100%);
 }
 
 .project-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-10px);
+    border-color: var(--primary-color);
+    box-shadow: var(--glow-md);
 }
 
 .project-header {
@@ -455,11 +487,11 @@ section {
 }
 
 .tech-stack span {
-    background: var(--bg-secondary);
+    background: var(--bg-accent);
     padding: 0.3rem 0.8rem;
     border-radius: 50px;
     font-size: 0.9rem;
-    color: var(--text-secondary);
+    color: var(--primary-color);
 }
 
 /* Skills Section */
@@ -471,33 +503,46 @@ section {
 }
 
 .skill-category {
-    background: var(--bg-primary);
-    padding: 2rem;
+    background: var(--bg-secondary);
+    border: 1px solid rgba(100, 255, 218, 0.1);
     border-radius: 1rem;
-    box-shadow: var(--shadow-md);
-    text-align: center;
+    padding: 2rem;
+    transition: all 0.3s ease;
 }
 
-.skill-icon {
-    font-size: 2rem;
+.skill-category:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-color);
+    box-shadow: var(--glow-sm);
+}
+
+.skill-icon i {
+    font-size: 2.5rem;
     color: var(--primary-color);
     margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
 }
 
-.skill-items {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    justify-content: center;
-    margin-top: 1rem;
+.skill-category:hover .skill-icon i {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 10px var(--primary-color));
 }
 
 .skill-tag {
-    background: var(--bg-secondary);
+    background: var(--bg-accent);
+    color: var(--primary-color);
     padding: 0.5rem 1rem;
     border-radius: 50px;
     font-size: 0.9rem;
-    color: var(--text-secondary);
+    margin: 0.5rem;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.skill-tag:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--glow-sm);
+    transform: translateY(-2px);
 }
 
 /* Certifications */
@@ -508,11 +553,14 @@ section {
 }
 
 .certification-item {
-    background: var(--bg-primary);
+    background: var(--bg-secondary);
     padding: 2rem;
     border-radius: 1rem;
     box-shadow: var(--shadow-md);
     text-align: center;
+    border: 1px solid rgba(100, 255, 218, 0.1);
+    position: relative;
+    overflow: hidden;
 }
 
 .certification-icon {
@@ -528,6 +576,21 @@ section {
 
 .certification-item p {
     color: var(--text-secondary);
+}
+
+.certification-logo {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+.certification-item:hover .certification-logo {
+    transform: rotate(360deg);
+    opacity: 1;
 }
 
 /* Footer */
@@ -651,6 +714,68 @@ footer {
     .btn {
         width: 100%;
         text-align: center;
+    }
+}
+
+/* Matrix Animation */
+.matrix-rain {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    border: 2px solid var(--primary-color);
+    box-shadow: var(--glow-md);
+}
+
+.matrix-dot {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    filter: drop-shadow(0 0 2px var(--primary-color));
+    opacity: 0;
+}
+
+.matrix-line {
+    position: absolute;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, var(--primary-color), transparent);
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.5;
+    filter: drop-shadow(0 0 5px var(--primary-color));
+}
+
+@keyframes matrixRain {
+    0% {
+        transform: translateY(-100%);
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+@keyframes matrixLine {
+    0% {
+        height: 0;
+        opacity: 0;
+    }
+    50% {
+        height: 100%;
+        opacity: 0.5;
+    }
+    100% {
+        height: 0;
+        opacity: 0;
     }
 }
 

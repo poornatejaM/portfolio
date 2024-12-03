@@ -5,6 +5,16 @@ AOS.init({
     once: true
 });
 
+// Matrix animation for logo
+function updateMatrixAnimation() {
+    const dots = document.querySelectorAll('.matrix-dot');
+    dots.forEach(dot => {
+        dot.style.animationDuration = Math.random() * 1 + 1 + 's';
+    });
+}
+
+setInterval(updateMatrixAnimation, 2000);
+
 // Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -40,6 +50,23 @@ window.addEventListener('scroll', () => {
     } else {
         navbar.classList.remove('scrolled');
     }
+
+    // Update active section in navigation
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop - 150;
+        const sectionBottom = sectionTop + section.offsetHeight;
+        if (currentScroll >= sectionTop && currentScroll < sectionBottom) {
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === section.getAttribute('id')) {
+                    link.classList.add('active');
+                }
+            });
+        }
+    });
     
     lastScroll = currentScroll;
 });
@@ -52,72 +79,41 @@ let menuOpen = false;
 menuBtn.addEventListener('click', () => {
     if (!menuOpen) {
         menuBtn.classList.add('open');
-        navLinks.style.display = 'flex';
-        navLinks.style.flexDirection = 'column';
-        navLinks.style.position = 'absolute';
-        navLinks.style.top = '100%';
-        navLinks.style.left = '0';
-        navLinks.style.right = '0';
-        navLinks.style.backgroundColor = 'var(--bg-primary)';
-        navLinks.style.padding = '1rem';
-        navLinks.style.boxShadow = 'var(--shadow-md)';
+        navLinks.classList.add('open');
         menuOpen = true;
     } else {
         menuBtn.classList.remove('open');
-        navLinks.style.display = 'none';
+        navLinks.classList.remove('open');
         menuOpen = false;
     }
 });
 
-// Update active nav link on scroll
-const sections = document.querySelectorAll('section');
-const navItems = document.querySelectorAll('.nav-links a');
-
-window.addEventListener('scroll', () => {
-    let current = '';
-    
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (window.pageYOffset >= sectionTop - 200) {
-            current = section.getAttribute('id');
-        }
-    });
-    
-    navItems.forEach(item => {
-        item.classList.remove('active');
-        if (item.getAttribute('href').slice(1) === current) {
-            item.classList.add('active');
-        }
-    });
-});
-
 // Typing effect for hero description
-const heroDescription = document.querySelector('.hero-description');
-const text = heroDescription.textContent;
-heroDescription.textContent = '';
+const text = "Passionate about developing intelligent solutions and pushing the boundaries of AI technology";
+let index = 0;
 
-let i = 0;
-const typeWriter = () => {
-    if (i < text.length) {
-        heroDescription.textContent += text.charAt(i);
-        i++;
+function typeWriter() {
+    const heroDescription = document.querySelector('.hero-description');
+    if (index < text.length) {
+        heroDescription.textContent = text.substring(0, index + 1);
+        index++;
         setTimeout(typeWriter, 50);
     }
-};
+}
 
 // Start typing effect when the page loads
-window.addEventListener('load', typeWriter);
+window.addEventListener('load', () => {
+    typeWriter();
+    updateMatrixAnimation();
+});
 
 // Add hover effect to project cards
-const projectCards = document.querySelectorAll('.project-card');
-
-projectCards.forEach(card => {
-    card.addEventListener('mouseenter', () => {
-        card.style.transform = 'translateY(-10px)';
+document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-10px)';
     });
     
-    card.addEventListener('mouseleave', () => {
-        card.style.transform = 'translateY(0)';
+    card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
     });
 });
